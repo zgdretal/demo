@@ -262,7 +262,7 @@ public class AboutString {
      * @return
      */
     public List<String> restoreIpAddresses(String s) {
-
+        return null;
     }
 
 }

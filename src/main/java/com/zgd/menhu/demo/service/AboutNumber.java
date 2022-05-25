@@ -113,4 +113,12 @@ public class AboutNumber {
         }
         return head;
     }
+
+    /**
+     * 求平方根 https://leetcode.cn/problems/jJ0w9p/
+     */
+    public int mySqrt(int x) {
+
+        return 0;
+    }
 }
