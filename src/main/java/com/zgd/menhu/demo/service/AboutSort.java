@@ -43,7 +43,7 @@ public class AboutSort {
                 swap(arr, left, right);
             }
         }
-        arr[pos] = arr[left];
+        //arr[pos] = arr[left];
         arr[left] = temp;
         return left;
     }

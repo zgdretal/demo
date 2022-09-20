@@ -265,4 +265,15 @@ public class AboutString {
         return null;
     }
 
+    /**
+     * 生成括号，输入n对括号，看看生成多少种合法的括号组合
+     * https://leetcode.cn/problems/generate-parentheses/solution/gua-hao-sheng-cheng-by-leetcode-solution/
+     * @param n
+     * @return
+     */
+    /*public List<String> generateParenthesis(int n) {
+        Collections.swap();
+
+    }*/
+
 }
