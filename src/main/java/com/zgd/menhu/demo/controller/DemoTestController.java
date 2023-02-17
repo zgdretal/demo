@@ -3,14 +3,13 @@ package com.zgd.menhu.demo.controller;
 import com.zgd.menhu.demo.service.TranserInfo;
 import com.zgd.menhu.demo.service.TransferType;
 import com.zgd.menhu.demo.service.User;
+import org.apache.tomcat.util.net.IPv6Utils;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletResponse;
+import java.net.InetAddress;
 import java.util.*;
 
 @RestController
@@ -28,7 +27,16 @@ public class DemoTestController {
     @CrossOrigin
     public Map<String ,Object> login(@RequestParam("userName") String userName, @RequestParam("password") String password) {
         Map<String ,Object> map = new HashMap<>();
-        if (!StringUtils.isEmpty(userName)) {
+        try {
+            InetAddress addr = InetAddress.getLocalHost();
+            System.out.println("Local HostAddress:"  +
+                    addr.getHostAddress() + "name" +
+                    addr.getHostName());
+        } catch (Exception e) {
+        }
+
+        //System.out.println("Local host name: "+hostname);
+        if (StringUtils.isEmpty(userName)) {
             map.put("msg", "请输入用户名");
             return map;
         }
