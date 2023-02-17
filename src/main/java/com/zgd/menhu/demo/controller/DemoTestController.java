@@ -3,6 +3,8 @@ package com.zgd.menhu.demo.controller;
 import com.zgd.menhu.demo.service.TranserInfo;
 import com.zgd.menhu.demo.service.TransferType;
 import com.zgd.menhu.demo.service.User;
+import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -12,7 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.*;
 
 @RestController
-@RequestMapping("/web")
+//@RequestMapping("/web")
 public class DemoTestController {
 
     private Map<Integer, User> userMaps = new HashMap<>();
@@ -20,6 +22,25 @@ public class DemoTestController {
     @RequestMapping("/test")
     public String test() {
         return "陈芳";
+    }
+
+    @RequestMapping("/admin/login")
+    @CrossOrigin
+    public Map<String ,Object> login(@RequestParam("userName") String userName, @RequestParam("password") String password) {
+        Map<String ,Object> map = new HashMap<>();
+        if (!StringUtils.isEmpty(userName)) {
+            map.put("msg", "请输入用户名");
+            return map;
+        }
+
+        if (!userName.equals("zhangguodong")) {
+            map.put("msg", "非法用户");
+            return map;
+        }
+
+        map.put("code", 200);
+        map.put("msg", "成功");
+        return map;
     }
 
     @RequestMapping("/config")
