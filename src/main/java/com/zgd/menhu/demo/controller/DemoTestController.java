@@ -1,13 +1,18 @@
 package com.zgd.menhu.demo.controller;
 
+import com.zgd.menhu.demo.dao.UserMapper;
+import com.zgd.menhu.demo.model.UserModel;
 import com.zgd.menhu.demo.service.TranserInfo;
 import com.zgd.menhu.demo.service.TransferType;
 import com.zgd.menhu.demo.service.User;
 import org.apache.tomcat.util.net.IPv6Utils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.ui.ModelMap;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.net.InetAddress;
 import java.util.*;
@@ -16,36 +21,84 @@ import java.util.*;
 //@RequestMapping("/web")
 public class DemoTestController {
 
+    @Autowired
+    private UserMapper userMapper;
+
     private Map<Integer, User> userMaps = new HashMap<>();
 
     @RequestMapping("/test")
     public String test() {
+        UserModel userModel = userMapper.getUser("test");
         return "陈芳";
     }
 
     @RequestMapping("/admin/login")
     @CrossOrigin
-    public Map<String ,Object> login(@RequestParam("userName") String userName, @RequestParam("password") String password) {
+    public Map<String ,Object> login(UserModel userModel) {
         Map<String ,Object> map = new HashMap<>();
         try {
             InetAddress addr = InetAddress.getLocalHost();
-            System.out.println("Local HostAddress:"  +
+            /*System.out.println("Local HostAddress:"  +
                     addr.getHostAddress() + "name" +
-                    addr.getHostName());
+                    addr.getHostName());*/
         } catch (Exception e) {
         }
 
         //System.out.println("Local host name: "+hostname);
-        if (StringUtils.isEmpty(userName)) {
+        if (userModel == null || StringUtils.isEmpty(userModel.getName())) {
             map.put("msg", "请输入用户名");
             return map;
         }
 
-        if (!userName.equals("zhangguodong")) {
-            map.put("msg", "非法用户");
+        UserModel user = userMapper.getUser(userModel.getName());
+
+        if (user == null) {
+            map.put("msg", "该用户还没注册，请先完成注册申请");
+            map.put("code", 10032);
+            return map;
+        }
+        if (!user.getPassword().equals(userModel.getPassword())) {
+            map.put("msg", "密码错误");
+            map.put("code", 10032);
             return map;
         }
 
+        map.put("code", 200);
+        map.put("msg", "成功");
+        return map;
+    }
+
+    @RequestMapping("/admin/register")
+    @CrossOrigin
+    public Map<String ,Object> register(UserModel userModel) {
+
+        Map<String ,Object> map = new HashMap<>();
+        if (userModel == null || StringUtils.isEmpty(userModel.getName())) {
+            map.put("msg", "请输入用户名");
+            return map;
+        }
+
+        if (userModel == null || StringUtils.isEmpty(userModel.getPassword())) {
+            map.put("msg", "请输入密码");
+            return map;
+        }
+
+        UserModel user = userMapper.getUser(userModel.getName());
+        if (user != null) {
+            map.put("msg", "该用户名已被注册");
+            return map;
+        }
+        int res = userMapper.registerUser(userModel.getName(), userModel.getPassword());
+        map.put("code", 200);
+        map.put("msg", "成功");
+        return map;
+    }
+
+
+    @RequestMapping("/admin/logout")
+    @CrossOrigin
+    public Map<String ,Object> logout(UserModel userModel) {
+        Map<String ,Object> map = new HashMap<>();
         map.put("code", 200);
         map.put("msg", "成功");
         return map;
@@ -192,5 +245,25 @@ public class DemoTestController {
         result.setViewName("index");
         result.addObject("userList", userList);
         return result;
+    }
+
+    @RequestMapping("/index111")
+    public void index(HttpServletRequest request, HttpServletResponse response, ModelMap modelMap) throws Exception{
+        UserModel userModel = userMapper.getUser("");
+        ModelAndView modelAndView = new ModelAndView("/index222");
+        modelAndView.addObject("name11", "zgdaaaaa");
+        modelAndView.addObject("user", userModel);
+        request.setAttribute("name11", "name11");
+        request.setAttribute("user", userModel);
+        request.getRequestDispatcher("/").forward(request, response);
+    }
+
+    @RequestMapping("/index222")
+    public ModelAndView index222(HttpServletRequest request, HttpServletResponse response, ModelMap modelMap) throws Exception{
+        UserModel userModel = userMapper.getUser("");
+        ModelAndView modelAndView = new ModelAndView("/indesx.jsp");
+        modelAndView.addObject("name11", "zgdaaaaa");
+        modelAndView.addObject("user", userModel);
+        return modelAndView;
     }
 }

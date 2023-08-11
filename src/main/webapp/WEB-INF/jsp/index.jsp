@@ -8,9 +8,12 @@
     <title>Title</title>
 </head>
 <body>
-玩家: ${user.userName}<br>
+玩家: ${user.name}<input type="text" name="email" class="bg" />request:${user}<br>
 玩家id: ${user.uid}<br>
-玩家余额: ${user.account}<br>
+玩家余额: ${user.name}<br>
+
+<div>${user}</div>
+
 
 <br>
 ================
