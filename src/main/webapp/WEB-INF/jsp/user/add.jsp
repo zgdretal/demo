@@ -25,6 +25,9 @@
             <td style="width: 200px;">电话号码</td>
             <input class="content-search" name="phone" value="${phone}" type="search" placeholder="请输入姓名"><br>
 
+            <td style="width: 200px;">组号</td>
+            <input class="content-search" name="groupId" value="${groupId}" type="search" placeholder="请输入组号"><br>
+
             <button class="content-search-btn" type="submit" >添加</button>
         </form>
     </div>

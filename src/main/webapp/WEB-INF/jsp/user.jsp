@@ -8,16 +8,16 @@
     <title>Title</title>
 </head>
 <body>
-姓名: ${user.userName}<input type="text" name="email" class="bg" />request:${name11}<br>
-玩家id: ${user.uid}<br>
-玩家余额: ${name11}<br>
+姓名: ${user.name}<br>
+玩家id: ${user.id}<br>
+玩家余额($): ${user.id*100}<br>
 
 <div>${name11}</div>
 
 <br>
 ================
 <br>
-对手信息列表：<br>
+所属组号：<input class="content-search" name="groupId" value="${user.groupId}" type="search" ><br>
 ================
 <br>
 

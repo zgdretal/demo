@@ -17,15 +17,16 @@
     <link rel="stylesheet" href="/resources/customer-list/customer-list.css"/>
     <title>用户列表</title>
 </head>
-<body>
+<body  background="../test.jpeg" background-repeat="no-repeat">
 
 
 <input id="sort" type="hidden" value="${sort}"/>
+
 <div class="content">
     <div class="content-head">
         <div class="content-searchBox">
-            <form action="/smsInfo/list" method="get">
-                <input class="content-search" name="term" value="${term}" type="search" placeholder="请输入搜索信息">
+            <form action="/searchUser" method="get">
+                <input class="content-search" name="search" value="${search}" type="search" placeholder="请输入搜索信息">
                 <button class="content-search-btn" type="submit">搜索</button>
                 <td>
                     <a class="look-buy-list link-btn" href="/add">添加人员</a>
@@ -37,8 +38,8 @@
         <tr class="list-title">
             <td style="width: 200px;">用户姓名</td>
             <td style="width: 200px;">手机号码</td>
-            <td style="width: 200px;">产品名称</td>
-            <td>
+            <td style="width: 200px;">备注</td>
+            <%--<td>
                 购买日期
                 <a id="pup" class="sort-up" href="/smsInfo/sortby?term=${term}&sort=1"></a>
                 <a id="pdown" class="sort-down" href="/smsInfo/sortby?term=${term}&sort=2"></a>
@@ -47,13 +48,13 @@
                 短信发送日期
                 <a id="sup" class="sort-up" href="/smsInfo/sortby?term=${term}&sort=3"></a>
                 <a id="sdown" class="sort-down" href="/smsInfo/sortby?term=${term}&sort=4"></a>
-            </td>
+            </td>--%>
             <td style="width: 200px;">操作</td>
         </tr>
         <c:choose>
             <c:when test="${totalCount == 0}">
                 <div class="content">
-                    <div class="list-none">很遗憾，没有相关的短信记录</div>
+                    <div class="list-none">很遗憾，你没有添加记录</div>
                 </div>
             </c:when>
             <c:otherwise>
@@ -68,11 +69,12 @@
                     </c:choose>
                         <td>${info.name}</td>
                         <td>${info.phone}</td>
-                        <td>--</td>
-                        <td>2023-08-11</td>
-                        <td>2023-08-11</td>
+                        <td>${info.groupId}</td>
+                        <%--<td>2023-08-11</td>
+                        <td>2023-08-11</td>--%>
                         <td>
-                            <a class="list-delete" href="/smsInfo/view?id=${info.id}">查看详情</a>
+                            <a class="list-delete" href="/userDetail?id=${info.id}">查看详情</a>
+                            <a class="delete-user" href="/deleteUser?id=${info.id}">删除</a>
                             <%--<a class="list-delete" href="/order/listById?id=${info.invoiceId}">购买信息</a>
                             <a class="list-delete delete-btn" href="javascript:void(0)" data-value="${info.id}&fromOrderPage=false">删除</a>--%>
                         </td>
