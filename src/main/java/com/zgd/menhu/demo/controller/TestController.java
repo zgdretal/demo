@@ -20,9 +20,11 @@ public class TestController {
     }
 
     public static void main(String[] args) {
-        String fileName = "/Users/zgd/Desktop/zgdtest.xlsx";
+        String fileName = "E:\\mygithub/zgdtest.xlsx";
         EasyExcel.read(fileName, User.class, new UserExcelListener()).sheet(1).doRead();
         XWPFDocument xwpfDocument = new XWPFDocument();
+        XWPFComment[] comments = xwpfDocument.getComments();
+
         System.out.println(chineseNumber2Int("十二"));
     }
 

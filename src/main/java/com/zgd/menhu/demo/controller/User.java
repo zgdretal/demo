@@ -54,6 +54,15 @@ public class User {
         if (StringUtils.isEmpty(family)) {
             return 0;
         }
+
+        if (family.contains("之子")){
+            return 1;
+        }
+
+        if (family.contains("长子")){
+            return 1;
+        }
+
         if (family.contains("之长子")){
             return 1;
         }
@@ -80,6 +89,11 @@ public class User {
         if (family.contains("之长女")){
             return 1;
         }
+
+        if (family.contains("长女")){
+            return 1;
+        }
+
         if (family.contains("之次女")){
             return 2;
         }
