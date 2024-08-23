@@ -68,7 +68,7 @@ public class UserExcelListener extends AnalysisEventListener<User> {
             userListMap.put(user.getRealLevel(), userList);
         }
 
-        if (userListMap.size() == 9) {
+        if (userListMap.size() == 10) {
             test();
         }
     }
@@ -76,7 +76,7 @@ public class UserExcelListener extends AnalysisEventListener<User> {
     private static void test() {
         Map<String, List<User>> sonMap = new HashMap<>();
         Map<String, List<User>> daughterMap = new HashMap<>();
-        Map<String, User> wifeMap = new HashMap<>();
+        Map<String, List<User>> wifeMap = new HashMap<>();
         for (Map.Entry<Integer, List<User>> entry : userListMap.entrySet()) {
             for (User user: entry.getValue()) {
                 if (user.getFamily().contains("子")) {
@@ -104,7 +104,14 @@ public class UserExcelListener extends AnalysisEventListener<User> {
 
 
                 if (user.getFamily().contains("之妻")) {
-                    wifeMap.put(user.getFamily().substring(0,3), user);
+                    if (wifeMap.get(user.getFamily().substring(0,3)) != null) {
+                        wifeMap.get(user.getFamily().substring(0,3)).add(user);
+                    } else {
+                        List<User> users = new ArrayList<>();
+                        users.add(user);
+                        wifeMap.put(user.getFamily().substring(0,3), users);
+                    }
+
                 }
             }
         }
@@ -122,10 +129,21 @@ public class UserExcelListener extends AnalysisEventListener<User> {
                 xwpfRun1.setBold(true);
 
                 StringBuilder text = new StringBuilder();
-                text.append("  ").append("生于").append(user.getBirthDay()).append(",");
+                if (user.getBirthDay().equals("不详")) {
+                    text.append("出生日期不详,");
+                } else {
+                    text.append("  ").append("生于").append(user.getBirthDay()).append(",");
+                }
+
 
                 if (wifeMap.get(user.getName()) != null) {
-                    text.append("配偶").append(wifeMap.get(user.getName()).getName()).append(", ");
+                    List<User> wifeList = wifeMap.get(user.getName());
+                    String wifeName = "";
+                    for (User wife: wifeList) {
+                        wifeName = wifeName + wife.getName() + ",";
+                    }
+
+                    text.append("配偶").append(wifeName.substring(0, wifeName.length() -1)).append(", ");
                 }
 
                 if (sonMap.get(user.getName()) != null) {
@@ -144,8 +162,22 @@ public class UserExcelListener extends AnalysisEventListener<User> {
                     text.append(", ");
                 }
                 if (user.getDeadDay() != null) {
-                    text.append("殁于").append(user.getDeadDay()).append(", ");
-                    text.append("安葬于").append(user.getFengmuLocaltion()).append(", ").append(user.getFengmuLocaltionFangxiang()).append(", ");
+                    if (user.getDeadDay().equals("不详")) {
+                        text.append("死亡日期不详, ");
+                    } if (user.getDeadDay().equals("不祥")) {
+                        text.append("死亡日期不详, ");
+                    }else {
+                        text.append("殁于").append(user.getDeadDay()).append(", ");
+                    }
+
+                    text.append("安葬于").append(user.getFengmuLocaltion()).append(", ");
+                    if (!StringUtils.isEmpty(user.getFengmuLocaltionFangxiang()) &&
+                            !user.getFengmuLocaltionFangxiang().equals("不详") &&
+                            !user.getFengmuLocaltionFangxiang().equals("不祥")) {
+                        text.append(user.getFengmuLocaltionFangxiang().substring(0,1)).append("山")
+                                .append(user.getFengmuLocaltionFangxiang().substring(1,2)).append("向").append(", ");
+                    }
+
                 }
 
                 xwpfRun.setText(text.toString());
